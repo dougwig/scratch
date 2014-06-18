@@ -11,7 +11,4 @@ class MyTlsManager(SampleBaseManager):
     def delete(self, context, listener_obj, barb_id):
         self.rest_client.delete('/cert', "{'name': '%s'}" % barb_id)
 
-    def get(self, context, listener_obj, barb_id):
-        self.rest_client.get('/cert', "{'name': '%s'}" % barb_id)
-
 

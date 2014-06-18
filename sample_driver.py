@@ -4,10 +4,12 @@ import my_tls_handler
 
 class SampleDriver(abs.LoadBalancerAbstractDriver):
     def __init__(self):
-        self.set_required_handlers(MyLoadBalancerManager, MyListenerManager,
-                                   MyPoolManager, MyMemberManager,
-                                   MyHealthMonitorManager, MyStatsManager)
-        self.register_optional_handler('lbaas-tls', my_tls_handler.TlsManager)
+        self.load_balancer = MyLoadBalancerManager
+        self.listener = MyListenerManager
+        self.pool = MyPoolManager
+        self.member = MyMemberManager
+        self.health_monitor = MyHealthMonitorManager
+        self.tls = my_tls_handler.TlsManager
 
 
 class SampleBaseManager(abs.BaseManager):

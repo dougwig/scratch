@@ -1,29 +1,33 @@
 
 
 class LoadBalancerAbstractDriver(object):
-    LBAAS_REQUIRED_MANAGERS = {
-        'lbaas-lb': LoadBalancerManager,
-        'lbaas-listener': ListenerManager,
-        'lbaas-pool': PoolManager,
-        'lbaas-member': MemberManager,
-        'lbaas-hm': HealthMonitorManager,
-        'lbaas-stats': StatsManager
-    }
-
     def __init__(self):
-        self.managers = {}
-        for k,v in LBAAS_REQUIRED_MANAGERS.items():
-            self.managers[k] = v
+        self.set_required_handlers(LoadBalancerManager, ListenerManager,
+                                   PoolManager, MemberManager,
+                                   HealthMonitorManager, StatsManager)
 
-    def register_manager(self, label, manager_class):
-        self.managers[label] = manager_class
+    def set_required_handlers(self,
+                              load_balancer_handler_class,
+                              listener_handler_class,
+                              pool_handler_class,
+                              member_handler_class,
+                              stats_handler_class):
+        self.handlers = {}
+        self.handlers['load_balancer'] = load_balancer_handler_class
+        self.handlers['listener'] = listener_handler_class
+        self.handlers['pool'] = pool_handler_class
+        self.handlers['member'] = member_handler_class
+        self.handlers['stats'] = stats_handler_class
+
+    def register_optional_handler(self, label, handler_class):
+        self.handlers[label] = manager_class
 
     def supported_labels(self):
-        return self.managers.keys()
+        return self.handlers.keys()
 
-    def get_manager_class(self, label):
-        if label in self.managers:
-            return self.managers[label]
+    def get_handler_class(self, label):
+        if label in self.handlers:
+            return self.handlers[label]
         return None
 
 
